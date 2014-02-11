@@ -1,0 +1,6 @@
+<fest:template xmlns:fest="http://fest.mail.ru" context_name="json">
+	<div>
+		<h1>Game screen</h1>
+		<li><a href="#" class="js-back">Back</a></li>
+	</div>
+</fest:template>
