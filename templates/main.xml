@@ -1,9 +1,15 @@
 <fest:template xmlns:fest="http://fest.mail.ru" context_name="json">
 	<div class = "screen">
-		<h1> Game!! </h1>
-		<ul>
-			<li><a href="#" class="js-scoreboard">Score Board</a></li>
-			<li><a href="#" class="js-start-game">Start Game</a></li>
-		</ul>
+		<center><div class="title">EPIC GAME</div></center>
+		<br/>
+		<center><h1>Main Menu</h1></center>
+		<br/>
+		<center>	
+			<a href="#" class="js-start-game">Start game</a>
+		</center>
+			<br/>
+		<center>
+			<a href="#" class="js-scoreboard">Score Board</a>
+		</center>
 	</div>
 </fest:template>

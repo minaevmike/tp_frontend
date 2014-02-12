@@ -28,18 +28,49 @@ module.exports = function (grunt) {
 			}
 		},
 		watch: {
-				fest: { /* Подзадача */
-					files: ['templates/*.xml'], /* следим за шаблонами */
-					tasks: ['fest'], /* перекомпилировать */
-					options: {
-						atBegin: true, /* запустить задачу при старте */
-						livereload: true
-					}
+			fest: { /* Подзадача */
+				files: ['templates/*.xml'], /* следим за шаблонами */
+				tasks: ['fest'], /* перекомпилировать */
+				options: {
+					atBegin: true, /* запустить задачу при старте */
+					//livereload: true
 				}
-		}
+			},
+			concat: {
+				files: [
+					'public/js/**/*.js',
+					'public/css/**/*.css'
+				],
+				tasks: ['concat'],
+				options:{
+					atBegin: true,
+				}
+			},
+			server: {
+               	files: [
+                   	'public/js/**/*.js', /* следим за статикой */
+                   	'public/css/**/*.css'
+               	],
+               	options: {
+                   	interrupt: true,
+                   	livereload: true /* перезагрузить страницу */
+               	}
+            },
+		},
+		concat: {
+			js: {
+				src: ['public/js/**/*.js'],
+				dest: 'public/common.js'
+			},
+			css: {
+				src: ['public/css/**/*.css'],
+				dest: 'public/common.css'
+			}
+		},
 	});
 	grunt.loadNpmTasks('grunt-contrib-connect');
 	grunt.loadNpmTasks('grunt-fest');
 	grunt.loadNpmTasks('grunt-contrib-watch');
-	grunt.registerTask('default', ['connect', 'watch']);
+	grunt.loadNpmTasks('grunt-contrib-concat');
+	grunt.registerTask('default', ['connect', 'watch','concat']);
 };
