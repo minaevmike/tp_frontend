@@ -1,4 +1,4 @@
-.js-start-game {
+.js-start-game, .js-back, .js-scoreboard  {
 	-moz-box-shadow:inset 0px 1px 0px 0px #fce2c1;
 	-webkit-box-shadow:inset 0px 1px 0px 0px #fce2c1;
 	box-shadow:inset 0px 1px 0px 0px #fce2c1;
@@ -34,12 +34,13 @@
 	font-family: "Rockwell Extra Bold", "Rockwell Bold", monospace;
 
 }
-.js-start-game:hover {
+.js-start-game:hover, .js-back:hover, .js-scoreboard:hover {
 	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #fb9e25), color-stop(1, #ffc477) );
 	background:-moz-linear-gradient( center top, #fb9e25 5%, #ffc477 100% );
 	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#fb9e25', endColorstr='#ffc477');
 	background-color:#fb9e25;
-}.js-start-game:active {
+}
+.js-start-game:active, .js-back:active, .js-scoreboard:active {
 	position:relative;
 	top:1px;
 }

@@ -4,6 +4,7 @@ module.exports = function (grunt) {
 			server: { /* Подзадача */
 				options: {
 				keepalive: false, /* работать постоянно */
+				hostname: '*',
 				port: 8000, /* номер порта */
 				base: 'public' /* публичная директория */
 			}
@@ -49,7 +50,8 @@ module.exports = function (grunt) {
 			server: {
                	files: [
                    	'public/js/**/*.js', /* следим за статикой */
-                   	'public/css/**/*.css'
+                   	'public/css/**/*.css',
+                   	'public/**/*.html'
                	],
                	options: {
                    	interrupt: true,
