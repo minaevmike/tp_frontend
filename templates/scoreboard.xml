@@ -5,10 +5,23 @@
 		</center>
 		<br/>
 		<h1>Scoreboard</h1>
-		<fest:each iterate="json" index="i">
-    		<fest:value>i</fest:value><fest:space/><fest:value>json[i].name</fest:value><fest:space/><fest:value>json[i].score</fest:value>
-    		<br /><!-- foo=bar -->
-		</fest:each>
+		<center>
+			<table>
+				<tr>
+					<th>Position</th>
+					<th>Name</th>
+					<th>Score</th>
+				</tr>
+				<fest:each iterate="json" index="i">
+					<fest:var name="answer" select="parseInt(i) + 1" />
+					<tr>
+    					<td><fest:value>answer</fest:value></td>
+    					<td><fest:value>json[i].name</fest:value></td>
+    					<td><fest:value>json[i].score</fest:value></td>
+    				</tr><!-- foo=bar -->
+				</fest:each>
+			</table>
+		</center>
 		<a href="#" class="js-back">Back</a>
 	</div>
 </fest:template>

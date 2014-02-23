@@ -17,7 +17,16 @@ module.exports = function (grunt) {
                     interrupt: true,
                     livereload: true
                 }
-            }
+            },
+            concat: {
+				files: [
+					'public/css/**/*.css'
+				],
+				tasks: ['concat'],
+				options:{
+					atBegin: true,
+				}
+			},
         },
         connect: {
             server: {
@@ -45,14 +54,21 @@ module.exports = function (grunt) {
                     }
                 }
             }
-        }
+        },
+        concat: {
+			css: {
+				src: ['public/css/**/*.css'],
+				dest: 'public/common.css'
+			}
+		},
     });
 
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-fest');
+   	grunt.loadNpmTasks('grunt-contrib-concat');
 
-    grunt.registerTask('default', ['connect', 'watch']);
+    grunt.registerTask('default', ['connect', 'watch', 'concat']);
 
 };
 

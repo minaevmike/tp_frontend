@@ -1,0 +1,12 @@
+table, td, th
+{
+border:1px solid #4D4C49;
+font-size : 32pt;
+font-family: "Rockwell Extra Bold", "Rockwell Bold", monospace;
+text-align: center;
+} 
+th
+{
+background-color:#4D4C49;
+color:white;
+}

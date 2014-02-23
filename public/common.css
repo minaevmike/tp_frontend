@@ -3,6 +3,7 @@ h1 {
 	font-size: 30pt;
 	text-align: center;
 }
+/* TODO */
 .js-start-game, .js-back, .js-scoreboard  {
 	-moz-box-shadow:inset 0px 1px 0px 0px #fce2c1;
 	-webkit-box-shadow:inset 0px 1px 0px 0px #fce2c1;
@@ -50,6 +51,18 @@ h1 {
 	top:1px;
 }
 /* This button was generated using CSSButtonGenerator.com */
+table, td, th
+{
+border:1px solid #4D4C49;
+font-size : 32pt;
+font-family: "Rockwell Extra Bold", "Rockwell Bold", monospace;
+text-align: center;
+} 
+th
+{
+background-color:#4D4C49;
+color:white;
+}
 .title { 
     background: #4D4C49; /* Цвет фона */
     width: 300px; /* Ширина блока */
