@@ -5,6 +5,10 @@
 		</center>
 		<br/>
 		<h1>Scoreboard</h1>
+		<fest:each iterate="json" index="i">
+    		<fest:value>i</fest:value><fest:space/><fest:value>json[i].name</fest:value><fest:space/><fest:value>json[i].score</fest:value>
+    		<br /><!-- foo=bar -->
+		</fest:each>
 		<a href="#" class="js-back">Back</a>
 	</div>
 </fest:template>

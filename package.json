@@ -1,5 +1,6 @@
 {
   "name": "epicgame",
+<<<<<<< HEAD
   "version": "0.0.0",
   "description": "tp frontend",
   "main": "index.js",
@@ -8,11 +9,22 @@
   },
   "author": "",
   "license": "ISC",
+=======
+  "version": "0.2.0",
+  "description": "",
+  "main": "index.js",
+  "author": "a.eprev@gmail.com",
+  "license": "MIT",
+>>>>>>> tp/v2
   "devDependencies": {
     "grunt": "~0.4.2",
     "grunt-contrib-connect": "~0.6.0",
     "grunt-fest": "~0.1.4",
+<<<<<<< HEAD
     "grunt-contrib-watch": "~0.5.3",
     "grunt-contrib-concat": "~0.3.0"
+=======
+    "grunt-contrib-watch": "~0.5.3"
+>>>>>>> tp/v2
   }
 }
