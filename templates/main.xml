@@ -5,11 +5,11 @@
 		<center><h1>Main Menu</h1></center>
 		<br/>
 		<center>	
-			<a href="#game" class="js-start-game">Start game</a>
+			<a href="#game" class="main__button_start">Start game</a>
 		</center>
 			<br/>
 		<center>
-			<a href="#scoreboard" class="js-scoreboard">Score Board</a>
+			<a href="#scoreboard" class="main__button_scoreboard">Score Board</a>
 		</center>
 	</div>
 </fest:template>

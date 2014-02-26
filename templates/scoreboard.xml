@@ -22,6 +22,6 @@
 				</fest:each>
 			</table>
 		</center>
-		<a href="#" class="js-back">Back</a>
+		<a href="#" class="button_back">Back</a>
 	</div>
 </fest:template>
