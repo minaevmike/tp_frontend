@@ -7,19 +7,19 @@ define([
 ){
 
     var View = Backbone.View.extend({
-        el: '#page',
         template: tmpl,
+        className: "#game",
         initialize: function () {
             // TODO
         },
         render: function () {
-            this.$el.html(this.template());
+            $(this.className).html(this.template());
         },
         show: function () {
-            this.render();
+            $(this.className).trigger( "show" );
         },
         hide: function () {
-            console.log("Game hide");
+            //this.$el.style.display = 'none';
         }
 
     });

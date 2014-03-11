@@ -9,34 +9,26 @@ define([
 ){
 
     var View = Backbone.View.extend({
-        el: '#page',
         template: tmpl,
+        className: "#scoreboard",
         initialize: function () {
-            collection.bind('reset', this.render, this);
+            collection.fetch({async : false});
+            //collection.bind('reset', this.render, this);
             //is.listenTo(coll, "change", this.render);
             //this.listenTo(this.model, "change", this.render);
         },
         render: function () {
-            //console.log(this.template());
-            //this.$el.html(this.template(this.model.toJSON()));
-            /*collection.fetch({
-                success : function() {
-                    self.$el.html(self.template());
-                }
-            });*/
-            //console.log(collection.toJSON());
-            console.dir(collection.toJSON());
+            //console.dir(collection.toJSON());
             collection.sort();
-            console.dir(collection.toJSON());
-            this.$el.html(this.template(collection.toJSON()));
+            //console.dir(collection.toJSON());
+            $(this.className).html(this.template(collection.toJSON()));
         },
         show: function () {
-            console.log("show");
-            //this.render();
-            collection.fetch({reset : true});
+            $(this.className).trigger( "show" );
+            //this.$el.style.display = 'none';
         },
         hide: function () {
-            console.log("Scoreboard Hide");
+            //this.$el.style.display = 'none';
             // TODO
         }
 

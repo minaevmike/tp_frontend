@@ -1,25 +1,29 @@
 define([
     'backbone',
-    'tmpl/main'
+    'tmpl/main',
+    'jquery'
 ], function(
     Backbone,
-    tmpl
+    tmpl,
+    $
 ){
 
     var View = Backbone.View.extend({
-        el: '#page',
         template: tmpl,
+        className: "#main",
         initialize: function () {
             // TODO
         },
         render: function () {
-            this.$el.html(this.template());
+            $(this.className).html(this.template());
         },
         show: function () {
-            this.render(); 
+            $(this.className).trigger( "show" );
+            //console.log($(this.className))
+            //$(this.className).trigger('show');
         },
         hide: function () {
-            console.log("Main hide");
+            //this.$el.style.display = 'none';
         }
 
     });

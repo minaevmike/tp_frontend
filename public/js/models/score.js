@@ -6,7 +6,7 @@ define([
 
     var Model = Backbone.Model.extend({
     	initialize: function(){
-           console.log("Oh hey! ");
+           //console.log("Oh hey! ");
        },
        defaults: {
            name: '',
