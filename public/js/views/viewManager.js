@@ -18,6 +18,7 @@ define(['backbone','jquery'],
 					});
 					views.push(view.className);
 					view.render();
+					//$(view.className).hide();
 				}
 			}
 

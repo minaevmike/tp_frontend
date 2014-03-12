@@ -3,12 +3,14 @@ define([
     'views/scoreboard',
     'views/main',
     'views/game',
+    'views/gameOver',
     'views/viewManager'
 ], function(
      Backbone,
      scoreboard,
      main,
      game,
+     gameOver,
      viewManager
 ){
 
@@ -29,7 +31,10 @@ define([
         },
         gameAction: function () {
             viewManager.add(game);
+            viewManager.add(gameOver);
+            gameOver.hide();
             game.show();
+            //game.gameOver();
         }
     });
 
