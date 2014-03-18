@@ -1,7 +1,9 @@
 define([
-    'backbone'
+    'backbone',
+    'tmpl/gameover'
 ], function(
-    Backbone
+    Backbone,
+    tmpl
 ){
 
     var View = Backbone.View.extend({
@@ -11,7 +13,9 @@ define([
         render: function () {
             //$(this.className).html(this.template());
             var score = Math.ceil(Math.random() * 10000);
-            $(this.className).append("<form id=\"score_form\"> Your score is <div id = \"score\">" + score + "</div><br />Username: <input type=\"text\" name=\"name\" required> <br /> <input type=\"submit\"> </form>")
+            var a = {"score":score};
+            $(this.className).html(tmpl(JSON.stringify(a)));
+            //$(this.className).append("<form id=\"score_form\"> Your score is <div id = \"score\">" + score + "</div><br />Username: <input type=\"text\" name=\"name\" required> <br /> <input type=\"submit\"> </form>")
             $("#score_form").submit(function(event){
                 var score = $("#score").text();
                 var username = $( "input:first" ).val();
@@ -27,6 +31,9 @@ define([
                             console.log("Ok");
                             window.location.href = "/#scoreboard";
                         }
+                    },
+                    error: function(){
+                        localStorage[username + "_" + Date.now()] = score;
                     }
                 })
                 event.preventDefault();

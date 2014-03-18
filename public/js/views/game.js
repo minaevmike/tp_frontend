@@ -1,11 +1,13 @@
 define([
     'backbone',
     'tmpl/game',
-    'views/gameOver'
+    'views/gameOver',
+    'mechanics/mechanics'
 ], function(
     Backbone,
     tmpl,
-    gameOver
+    gameOver,
+    game
 ){
 
     var View = Backbone.View.extend({
@@ -19,6 +21,9 @@ define([
                 $(this.className).hide();
                 gameOver.show();
             });
+            game.start(this.className);
+
+            //init();
         },
         show: function () {
             $("#score").replaceWith( "<div id = \"score\">" + Math.ceil(Math.random() * 10000) + "</div>" );

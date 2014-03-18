@@ -19,6 +19,7 @@ define([
                 url : this.url,
                 dataType : 'json',
                 success : function(data) {
+                    //setTimeout(function(){collection.reset(data)},1000);
                     collection.reset(data);
                 }
             });

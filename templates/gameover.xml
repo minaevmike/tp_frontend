@@ -1,0 +1,9 @@
+<fest:template xmlns:fest="http://fest.mail.ru" context_name="json">
+	<form id="score_form"> 
+		Your score is <div id = "score">  <fest:value>json.score</fest:value>  </div>
+		<br />
+		Username: <input type="text" name="name" required="required"/> 
+		<br /> 
+		<input type="submit"/>
+	</form>
+</fest:template>

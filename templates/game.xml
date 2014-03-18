@@ -1,4 +1,5 @@
 <fest:template xmlns:fest="http://fest.mail.ru" context_name="json">
+	<canvas id="canvas"></canvas><br />
 	<button type="button" name = "button_finish">Finish!</button><br />
 	<a href="#" class="button_back">Back</a>
 </fest:template>
