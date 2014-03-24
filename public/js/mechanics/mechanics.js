@@ -7,12 +7,14 @@ define(['exports','jquery'], function(exports, $){
     var keys = [];
     var bullets = new Array();
     var enemys = new Array();
+    var enemyBullets = new Array();
 
-    function Game(Vx, Vy, width, height){
+    function Game(Vx, Vy, width, height, collisionDmg){
         this.Vx = Vx;
         this.Vy = Vy;
         this.width = width;
         this.height = height;
+        this.collisionDmg = collisionDmg;
     }
     function drawBullets(){
         for(i = 0; i < bullets.length; ++i){
@@ -24,6 +26,12 @@ define(['exports','jquery'], function(exports, $){
             bullets[i].y  -= bullets[i].Vy;
             if(bullets[i].y < 0){
                 bullets.splice(i, 1);
+            }
+        }
+        for(i = 0; i < enemyBullets.length; ++i){
+            enemyBullets[i].y -= enemyBullets[i].Vy;
+            if(enemyBullets[i].y > game.height){
+                enemyBullets.splice(i, 1);
             }
         }
     }
@@ -49,7 +57,6 @@ define(['exports','jquery'], function(exports, $){
             context.fillRect(this.x, this.y, 3, 10);
         }
     }
-    var TO_RADIANS = Math.PI/180; 
     function Enemy(x, y, width, height, health){
         this.x = x;
         this.y = y;
@@ -67,16 +74,20 @@ define(['exports','jquery'], function(exports, $){
             enemys[i].draw();
         }
     }
-    function Player(x, y, width, height, color){
+    function drawEnemyBullets(){
+        for(i = 0; i < enemyBullets.length; ++i){
+            enemyBullets[i].draw();
+        }
+    }
+    function Player(x, y, width, height, health){
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
-        this.color = color;
+        this.health = health;
         this.img = new Image();
         this.img.src = '/images/player.png';
         this.draw = function(){
-            context.fillStyle = this.color;
             context.drawImage(this.img, this.x - this.width / 2, this.y - this.height / 2, this.width, this.height);
         }
     }
@@ -94,8 +105,32 @@ define(['exports','jquery'], function(exports, $){
                 }
             }
         }
+
+        for(i = 0; i < enemys.length; ++i){
+            distance = Math.sqrt(Math.pow(enemys[i].x - player.x,2) + Math.pow(enemys[i].y - player.y,2));
+            if(distance < 20){
+                enemys[i].health -= game.collisionDmg;
+                if (enemys[i].health <= 0){
+                        enemys.splice(i, 1);
+                }
+            }
+        }
+
+        for(i = 0; i < enemyBullets.length; ++i){
+            distance = Math.sqrt(Math.pow(enemyBullets[i].x - player.x,2) + Math.pow(enemyBullets[i].y - player.y,2));
+            if(distance < 20) {
+                player.health -= enemyBullets[i].damage;
+                enemyBullets.splice(i, 1);
+                if(player.health < 0){
+                    gameOver();
+                }
+            }
+        }
     }
 
+    function gameOver(){
+        console.log("OVER");
+    }
     function play(){
         collision();
         updatePosition();
@@ -103,13 +138,14 @@ define(['exports','jquery'], function(exports, $){
         player.draw();
         updateBullets();
         drawBullets();
+        drawEnemyBullets();
         drawEnemys();
     }
 
     function init() {
         canvas = document.getElementById("canvas");
-        game = new Game(6, 6, 640, 480);
-        $(name).attr("tabindex", 0).
+        game = new Game(6, 6, 640, 480, 20);
+        $(document).
         keydown(function(e){
             keys[e.keyCode] = true;
         }).keyup(function(e){
@@ -120,7 +156,11 @@ define(['exports','jquery'], function(exports, $){
         canvas.height = game.height; // задаём высоту холста
         context = canvas.getContext('2d');
         field = new Field(0, 0, game.width, game.height, "#000000")
-        player = new Player( canvas.width / 2, canvas.height - 30 / 2, 30, 30, "#FFFFFF");
+        player = new Player( canvas.width / 2, canvas.height - 30 / 2, 30, 30, 100);
+        setInterval(function(){
+            for(i = 0; i < enemys.length; ++i)
+                enemyBullets.push(new Bullet(enemys[i].x, enemys[i].y, -game.Vy, "#FF0000", 10));
+        }, 350);
         setInterval(play, 1000 / 50);
 
     }
