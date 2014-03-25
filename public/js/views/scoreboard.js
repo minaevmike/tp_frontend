@@ -1,11 +1,13 @@
 define([
     'backbone',
     'tmpl/scoreboard',
-    'collections/scores'
+    'collections/scores',
+    'jquery'
 ], function(
     Backbone,
     tmpl,
-    collection
+    collection,
+    $
 ){
 
     var View = Backbone.View.extend({
@@ -19,14 +21,46 @@ define([
         },
         show: function () {
             for(var i=0, len=localStorage.length; i<len; i++) {
-                var key = localStorage.key(i);
-                var value = localStorage[key];
-                console.log(key + " => " + value);
+                (function(i){
+                    var name = localStorage.key(i);
+                    var score = localStorage[name];
+                    console.log(name + " " + score);
+                    title = name.substring(0, name.indexOf('_'));
+                    username = name.substring(name.indexOf('_') + 1, name.lastIndexOf('_'));
+                    var toDelete = name;
+                    if (title == "shotemup") {
+                        $.ajax({
+                            type: "POST",
+                            url: "/scores",
+                            data: {
+                                name: username,
+                                score: score
+                            },
+                            statusCode: {
+                                400: function () {
+                                    console.log("Wrong data");
+                                },
+                                200: function () {
+              
+                                    localStorage.removeItem(name)
+                                }
+                            },
+
+                        });
+                    }
+
+                })(i);
             }
-            collection.fetch({reset : true});
+            console.log(collection.size());
             var tm = this.template;
             var clName = this.className;
-            $(clName).html("Loading");
+            if(collection.size() == 0) {
+                $(clName).html("Loading");
+            }
+            else {
+                $(clName).html(tm(collection.toJSON()));
+            }
+            collection.fetch({reset : true});
             collection.on("reset",function(){
                 $(clName).html(tm(collection.toJSON()));
                 $(clName).trigger( "show" );

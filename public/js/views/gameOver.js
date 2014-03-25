@@ -15,7 +15,6 @@ define([
             var score = Math.ceil(Math.random() * 10000);
             var a = {"score":score};
             $(this.className).html(tmpl(JSON.stringify(a)));
-            //$(this.className).append("<form id=\"score_form\"> Your score is <div id = \"score\">" + score + "</div><br />Username: <input type=\"text\" name=\"name\" required> <br /> <input type=\"submit\"> </form>")
             $("#score_form").submit(function(event){
                 var score = $("#score").text();
                 var username = $( "input:first" ).val();
@@ -33,18 +32,14 @@ define([
                         }
                     },
                     error: function(){
-                        localStorage[username + "_" + Date.now()] = score;
+                        localStorage["shotemup_"+username + "_" + Date.now()] = score;
                     }
                 })
                 event.preventDefault();
             });
         },
         show: function (viewManager) {
-            //$('body').append($('<div/>', {id: this.className.replace('#','')}));
             $(this.className).trigger( "show" );
-            //$(this.className).trigger( "show" );
-            //$('body').append("<div id=\"gameOver\"> <form action=\"#\">Username: <input type=\"text\" name=\"name\" required> <input type=\"submit\"> </form> </div>");
-            //$("#gameOver").hide();
         },
         hide: function () {
             $(this.className).hide();
