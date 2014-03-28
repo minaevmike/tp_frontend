@@ -8,6 +8,7 @@ define(['exports','jquery'], function(exports, $){
     var bullets = new Array();
     var enemys = new Array();
     var enemyBullets = new Array();
+    var powerUps = new Array();
 
     function Game(Vx, Vy, width, height, collisionDmg){
         this.Vx = Vx;
@@ -15,6 +16,19 @@ define(['exports','jquery'], function(exports, $){
         this.width = width;
         this.height = height;
         this.collisionDmg = collisionDmg;
+    }
+    function drawPowerUps(){
+        for(i = 0; i < powerUps.length; ++i){
+            powerUps[i].draw();
+        }
+    }
+    function updatePowerUps(){
+        for(i = 0; i < powerUps.length; ++i){
+            powerUps[i].y  -= powerUps[i].Vy;
+            if(powerUps[i].y > game.height){
+                powerUps.splice(i, 1);
+            }
+        }
     }
     function drawBullets(){
         for(i = 0; i < bullets.length; ++i){
@@ -26,6 +40,10 @@ define(['exports','jquery'], function(exports, $){
             bullets[i].y  -= bullets[i].Vy;
             if(bullets[i].y < 0){
                 bullets.splice(i, 1);
+            }
+            bullets[i].x -= bullets[i].Vx;
+            if(bullets[i].x < 0 || bullets.x > game.width) {
+                bullets[i].splice(i, 1);
             }
         }
         for(i = 0; i < enemyBullets.length; ++i){
@@ -46,11 +64,22 @@ define(['exports','jquery'], function(exports, $){
             context.fillRect(this.x, this.y, this.width, this.height);
         }
     }
-    function Bullet(x, y, Vy, color, damage){
+    function powerUp(x, y, Vy, color){
         this.x = x;
         this.y = y;
         this.color = color;
         this.Vy = Vy;
+        this.draw = function() {
+            context.fillStyle = this.color;
+            context.fillRect(this.x, this.y, 15, 15);
+        }
+    }
+    function Bullet(x, y, Vx, Vy, color, damage){
+        this.x = x;
+        this.y = y;
+        this.color = color;
+        this.Vy = Vy;
+        this.Vx = Vx;
         this.damage = damage;
         this.draw = function(){
             context.fillStyle = this.color;
@@ -85,6 +114,9 @@ define(['exports','jquery'], function(exports, $){
         this.width = width;
         this.height = height;
         this.health = health;
+        this.tshot = 1;
+        this.attackSpeed = 30;
+        this.shotTimer = 0;
         this.img = new Image();
         this.img.src = '/images/player.png';
         this.draw = function(){
@@ -126,6 +158,22 @@ define(['exports','jquery'], function(exports, $){
                 }
             }
         }
+        for(i = 0; i < powerUps.length; ++i){
+            distance = Math.sqrt(Math.pow(powerUps[i].x - player.x,2) + Math.pow(powerUps[i].y - player.y, 2));
+            if(distance < 30) {
+                if (powerUps[i].color == "#00FF00") {
+                    if (player.tshot < 3) {
+                        player.tshot++;
+                    }
+                    powerUps.splice(i, 1);
+                }
+                if (powerUps[i].color == "#00FFFF") {
+                    if(player.attackSpeed > 10) 
+                        player.attackSpeed = player.attackSpeed - 5;
+                    powerUps.splice(i, 1);
+                }
+            }
+        }
     }
 
     function gameOver(){
@@ -136,10 +184,12 @@ define(['exports','jquery'], function(exports, $){
         updatePosition();
         field.draw();
         player.draw();
+        drawEnemys();
+        updatePowerUps();
+        drawPowerUps();
         updateBullets();
         drawBullets();
         drawEnemyBullets();
-        drawEnemys();
     }
 
     function init() {
@@ -158,14 +208,23 @@ define(['exports','jquery'], function(exports, $){
         field = new Field(0, 0, game.width, game.height, "#000000")
         player = new Player( canvas.width / 2, canvas.height - 30 / 2, 60, 60, 100);
         setInterval(function(){
+            if (Math.random() > 0.95 && powerUps.length < 2) {
+                powerUps.push(new powerUp(player.x, 20, -(game.Vy / 6), "#00FF00"));
+            }
+            if (Math.random() > 0.95 && powerUps.length < 2) {
+                powerUps.push(new powerUp(player.x, 20, -(game.Vy / 6), "#00FFFF"));
+            }
+        }, 350);
+        setInterval(function(){
             for(i = 0; i < enemys.length; ++i)
                 if (Math.random() > 0.5)
-                    enemyBullets.push(new Bullet(enemys[i].x, enemys[i].y, -game.Vy, "#FF0000", 10));
+                    enemyBullets.push(new Bullet(enemys[i].x, enemys[i].y, 0, -game.Vy, "#FF0000", 10, 10));
         }, 350);
         setInterval(play, 1000 / 50);
 
     }
     function updatePosition(){
+        player.shotTimer++;
         if(keys[39]){
             if(player.x + player.width / 2 + game.Vx <= game.width)
                 player.x += game.Vx;
@@ -183,8 +242,20 @@ define(['exports','jquery'], function(exports, $){
                 player.y += game.Vy;
         }
         if(keys[32]){
-            bullets.push(new Bullet(player.x, player.y, game.Vy , "#FFFF00", 10));
-            keys[32] = false;
+            if( player.shotTimer > player.attackSpeed){
+                player.shotTimer = 0;
+                if (player.tshot == 3) {
+                    bullets.push(new Bullet(player.x - 17, player.y, -5, game.Vy , "#FFFF00", 10));
+                    bullets.push(new Bullet(player.x, player.y, 0, game.Vy , "#FFFF00", 10));
+                    bullets.push(new Bullet(player.x + 17, player.y, 5, game.Vy , "#FFFF00", 10));
+                } else if (player.tshot == 2) {
+                    bullets.push(new Bullet(player.x - 17, player.y, 0, game.Vy , "#FFFF00", 10));
+                    bullets.push(new Bullet(player.x + 17, player.y, 0, game.Vy , "#FFFF00", 10));
+                } else {
+                    bullets.push(new Bullet(player.x, player.y, 0, game.Vy , "#FFFF00", 10));
+                }
+                keys[32] = false;
+            }
         }
     }
     exports.start = function start(){
