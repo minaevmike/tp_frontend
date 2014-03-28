@@ -96,7 +96,7 @@ define(['exports','jquery'], function(exports, $){
         for(i = 0; i < enemys.length; ++i){
             for(j = 0 ; j < bullets.length; ++j){
                 distance = Math.sqrt(Math.pow(enemys[i].x - bullets[j].x,2) + Math.pow(enemys[i].y - bullets[j].y,2));
-                if (distance < 20){
+                if (distance < 30){
                     enemys[i].health -= bullets[j].damage;
                     bullets.splice(j, 1);
                     if (enemys[i].health <= 0){
@@ -108,7 +108,7 @@ define(['exports','jquery'], function(exports, $){
 
         for(i = 0; i < enemys.length; ++i){
             distance = Math.sqrt(Math.pow(enemys[i].x - player.x,2) + Math.pow(enemys[i].y - player.y,2));
-            if(distance < 20){
+            if(distance < 30){
                 enemys[i].health -= game.collisionDmg;
                 if (enemys[i].health <= 0){
                         enemys.splice(i, 1);
@@ -118,7 +118,7 @@ define(['exports','jquery'], function(exports, $){
 
         for(i = 0; i < enemyBullets.length; ++i){
             distance = Math.sqrt(Math.pow(enemyBullets[i].x - player.x,2) + Math.pow(enemyBullets[i].y - player.y,2));
-            if(distance < 20) {
+            if(distance < 30) {
                 player.health -= enemyBullets[i].damage;
                 enemyBullets.splice(i, 1);
                 if(player.health < 0){
@@ -151,15 +151,16 @@ define(['exports','jquery'], function(exports, $){
         }).keyup(function(e){
             keys[e.keyCode] = false;
         });
-        enemys.push(new Enemy(300,300, 30, 30, 100));
+        enemys.push(new Enemy(350,200, 60, 60, 100));
         canvas.width = game.width; // задаём ширину холста
         canvas.height = game.height; // задаём высоту холста
         context = canvas.getContext('2d');
         field = new Field(0, 0, game.width, game.height, "#000000")
-        player = new Player( canvas.width / 2, canvas.height - 30 / 2, 30, 30, 100);
+        player = new Player( canvas.width / 2, canvas.height - 30 / 2, 60, 60, 100);
         setInterval(function(){
             for(i = 0; i < enemys.length; ++i)
-                enemyBullets.push(new Bullet(enemys[i].x, enemys[i].y, -game.Vy, "#FF0000", 10));
+                if (Math.random() > 0.5)
+                    enemyBullets.push(new Bullet(enemys[i].x, enemys[i].y, -game.Vy, "#FF0000", 10));
         }, 350);
         setInterval(play, 1000 / 50);
 
