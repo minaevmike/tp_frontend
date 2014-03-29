@@ -12,34 +12,45 @@ define([
         },
         render: function () {
             //$(this.className).html(this.template());
-            var score = Math.ceil(Math.random() * 10000);
-            var a = {"score":score};
-            $(this.className).html(tmpl(JSON.stringify(a)));
+
+        },
+        show: function (pScore) {
+            console.log(pScore);
+            $(this.className).trigger( "show" );
+            var a = {"score":pScore};
+            console.log(JSON.stringify(a));
+            $(this.className).html(tmpl(a));
             $("#score_form").submit(function(event){
-                var score = $("#score").text();
+                console.log("Click");
+                //var score = $("#score").text();
                 var username = $( "input:first" ).val();
+                console.log(pScore);
                 $.ajax({
                     type: "POST",
                     url: "/scores",
-                    data : {name : username, score : score },
+                    data : {name : username, score : pScore},
                     statusCode :{
                         400: function() {
                             console.log("Wrong data");
+                            localStorage["shotemup_"+username + "_" + Date.now()] = pScore;
+                        },
+                        500: function() {
+                            console.log("Server out");
+                            localStorage["shotemup_"+username + "_" + Date.now()] = pScore;
                         },
                         200: function(){
                             console.log("Ok");
                             window.location.href = "/#scoreboard";
+                        },
+                        0: function(){
+                            console.log("SDAASDASD");
+                            localStorage["shotemup_"+username + "_" + Date.now()] = pScore;
+
                         }
                     },
-                    error: function(){
-                        localStorage["shotemup_"+username + "_" + Date.now()] = score;
-                    }
                 })
                 event.preventDefault();
             });
-        },
-        show: function (viewManager) {
-            $(this.className).trigger( "show" );
         },
         hide: function () {
             $(this.className).hide();

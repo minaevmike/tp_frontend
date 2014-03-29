@@ -21,7 +21,7 @@ define([
                 $(this.className).hide();
                 gameOver.show();
             });
-            game.start(this.className);
+            game.start(gameOver);
 
             //init();
         },
