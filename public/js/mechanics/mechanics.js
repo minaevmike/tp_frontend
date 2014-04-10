@@ -123,7 +123,7 @@ define(['exports','jquery'], function(exports, $){
         this.height = height;
         this.health = health;
         this.maxHP = health;
-        this.tshot = 3;
+        this.tshot = 1;
         this.attackSpeed = 30;
         this.shotTimer = 0;
         this.img = new Image();
