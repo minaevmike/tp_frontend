@@ -22,7 +22,6 @@ define([
                 gameOver.show();
             });
             game.start(gameOver);
-
             //init();
         },
         show: function () {

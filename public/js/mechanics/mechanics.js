@@ -2,6 +2,7 @@ define(['exports','jquery'], function(exports, $){
     var player;
     var width;
     var height;
+    var sky = new Array();
     var game;
     var name = "#canvas";
     var keys = [];
@@ -13,12 +14,13 @@ define(['exports','jquery'], function(exports, $){
     var gameOver;
     var intervals = new Array();
 
-    function Game(Vx, Vy, width, height, collisionDmg){
+    function Game(Vx, Vy, width, height, collisionDmg, starSpeed){
         this.Vx = Vx;
         this.Vy = Vy;
         this.width = width;
         this.height = height;
         this.collisionDmg = collisionDmg;
+        this.starSpeed = starSpeed;
     }
     function drawPowerUps(){
         for(i = 0; i < powerUps.length; ++i){
@@ -64,15 +66,16 @@ define(['exports','jquery'], function(exports, $){
             context.fillRect(this.x, this.y, this.width, this.height);
         }
     }
-    function powerUp(x, y, Vy, color, type){
+    function powerUp(x, y, Vy, type, src){
+        this.img = new Image();
+        this.img.src = src
         this.x = x;
         this.y = y;
-        this.color = color;
         this.Vy = Vy;
         this.type = type;
         this.draw = function() {
-            context.fillStyle = this.color;
-            context.fillRect(this.x, this.y, 15, 15);
+            context.drawImage(this.img, this.x , this.y , 20, 20);
+
         }
     }
     function Bullet(x, y, Vx, Vy, color, damage){
@@ -99,6 +102,53 @@ define(['exports','jquery'], function(exports, $){
             context.drawImage(this.img, this.x - this.width / 2, this.y - this.height / 2, this.width, this.height);
         } 
     }
+    function getRandomColor() {
+        var letters = '0123456789ABCDEF'.split('');
+        var color = '#';
+        for (var i = 0; i < 6; i++ ) {
+            color += letters[Math.round(Math.random() * 15)];
+        }
+        return color;
+    }
+    function star(x,y,color){
+        this.x = x;
+        this.y = y;
+        this.color = color;
+        this.depth = Math.random() * 100;
+        this.draw = function(){
+            context.fillStyle = this.color;
+            context.fillRect(this.x, this.y, 3, 3);
+        }
+    }
+
+    function drawSky(){
+        for(i = 0 ; i < sky.length; ++i){
+            sky[i].draw();
+        }
+    }
+    function aiMove(){
+        for(i = 0; i < enemys.length; ++i){
+            if(Math.random() > 0.5){
+                enemys[i].x += 3;
+            }
+            else
+                enemys[i].x -= 3;
+        }
+    }
+    function updateStarSky(){
+        out = 0;
+        for(i = 0; i < sky.length; ++i){
+            sky[i].y += game.starSpeed + 1 / sky[i].depth;
+            if(sky[i].y > game.height){
+                sky.splice(i,1);
+                out ++;
+            }
+        }
+        for(i = 0; i < out; ++i){
+            sky.push(new star(Math.round(Math.random() * game.width), 0, getRandomColor()));
+        }
+    }
+
     function drawScore(){
         context.fillStyle = "#FF0000";
         context.font = "30px Arial";
@@ -123,7 +173,7 @@ define(['exports','jquery'], function(exports, $){
         this.height = height;
         this.health = health;
         this.maxHP = health;
-        this.tshot = 3;
+        this.tshot = 1;
         this.attackSpeed = 30;
         this.shotTimer = 0;
         this.img = new Image();
@@ -186,6 +236,14 @@ define(['exports','jquery'], function(exports, $){
                     powerUps.splice(i, 1);
                     score += 5;
                 }
+                else
+                    if(powerUps[i].type == "healthBonus"){
+                        if(player.health < player.maxHP){
+                            player.health += player.maxHP / 10;
+                        }
+                        powerUps.splice(i,1);
+                        score += 5;
+                    }
             }
         }
     }
@@ -208,6 +266,9 @@ define(['exports','jquery'], function(exports, $){
         updatePowerUps();
         updateBullets();
         field.draw();
+        updateStarSky();
+        drawSky();
+        aiMove();
         player.draw();
         drawEnemys();
         drawPowerUps();
@@ -215,11 +276,17 @@ define(['exports','jquery'], function(exports, $){
         drawEnemyBullets();
         drawScore();
         drawHeathBar();
+
     }
 
     function init() {
         canvas = document.getElementById("canvas");
-        game = new Game(6, 6, 640, 480, 20);
+        game = new Game(6, 6, 640, 480, 20, 0.2);
+        sky;
+        count = 100;
+        for(i = 0; i < count; ++i){
+            sky.push(new star(Math.round(Math.random() * game.width), Math.round(Math.random() * game.height), getRandomColor()));
+        } 
         $(document).
         keydown(function(e){
             keys[e.keyCode] = true;
@@ -233,11 +300,14 @@ define(['exports','jquery'], function(exports, $){
         field = new Field(0, 0, game.width, game.height, "#000000")
         player = new Player( canvas.width / 2, canvas.height - 30 / 2, 60, 60, 100);
         intervals.push(setInterval(function(){
-            if (Math.random() > 0.95 && powerUps.length < 2) {
-                powerUps.push(new powerUp(player.x, 20, -(game.Vy / 6), "#00FF00", "shootBonus"));
+            if (Math.random() > 0.95 && powerUps.length < 20) {
+                powerUps.push(new powerUp(Math.random()*game.width, 20, -(game.Vy / 6), "shootBonus",'/images/bulletup.png'));
             }
-            if (Math.random() > 0.95 && powerUps.length < 2) {
-                powerUps.push(new powerUp(player.x, 20, -(game.Vy / 6), "#00FFFF", "attackSpeedBonus"));
+            if (Math.random() > 0.95 && powerUps.length < 20) {
+                powerUps.push(new powerUp(Math.random()*game.width, 20, -(game.Vy / 6), "attackSpeedBonus", '/images/firespeed.png'));
+            }
+            if (Math.random() > 0.95 && powerUps.length < 20) {
+                powerUps.push(new powerUp(Math.random()*game.width, 20, -(game.Vy / 6), "healthBonus", '/images/health.png'));
             }
         }, 350));
         intervals.push(setInterval(function(){
