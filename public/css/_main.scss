@@ -1,1 +1,89 @@
-/* TODO */
+$font: "Rockwell Extra Bold", "Rockwell Bold", monospace;
+$backgroudcolor : #4D4C49;
+@mixin border-radius($radius){
+  -webkit-border-top-left-radius: $radius;
+  -moz-border-radius-topleft: $radius;
+  border-top-left-radius: $radius;
+  -webkit-border-top-right-radius: $radius;
+  -moz-border-radius-topright: $radius;
+  border-top-right-radius: $radius;
+  -webkit-border-bottom-right-radius: $radius;
+  -moz-border-radius-bottomright: $radius;
+  border-bottom-right-radius: $radius;
+  -webkit-border-bottom-left-radius: $radius;
+  -moz-border-radius-bottomleft: $radius;
+  border-bottom-left-radius: $radius;
+}
+
+@mixin shadow($param){
+  -moz-box-shadow: $param;
+  -webkit-box-shadow: $param;
+  box-shadow: $param;
+
+}
+
+.main__button_start, .button_back, .main__button_scoreboard {
+  @include shadow(inset 0px 1px 0px 0px #fce2c1);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #333377), color-stop(1, #333399));
+  background: -moz-linear-gradient(center top, #333377 5%, #333399 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffc477', endColorstr='#fb9e25');
+  background-color: #ffc477;
+  @include border-radius(20px);
+  text-indent: 0;
+  border: 0px solid #3333ff;
+  display: inline-block;
+  color: #ffffff;
+  font-size: 13pt;
+  font-weight: bold;
+  font-style: normal;
+  height: 65px;
+  line-height: 65px;
+  width: 131px;
+  text-decoration: none;
+  text-align: center;
+  text-shadow: 1px 1px 0px #cc9f52;
+  font-family: $font; }
+
+.main__button_start:hover, .button_back:hover, .main__button_scoreboard:hover {
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #3333aa), color-stop(1, #3333ee));
+  background: -moz-linear-gradient(center top, #3333aa 5%, #3333ee 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fb9e25', endColorstr='#ffc477');
+  background-color: #fb9e25; }
+
+.main__button_start:active, .button_back:active, .main__button_scoreboard:active {
+  position: relative;
+  top: 1px; }
+
+h1 {
+  font-family: $font;
+  font-size: 30pt;
+  text-align: center; }
+
+table, td, th {
+  border: 1px solid $backgroudcolor;
+  font-size: 32pt;
+  font-family: $font;
+  text-align: center; }
+
+th {
+  background-color: $backgroudcolor;
+  color: white; }
+canvas { 
+  display:block; 
+  margin:0; 
+  padding:0; 
+}
+html, body { width:100%; height:100%; }
+@charset "UTF-8";
+.title {
+  background: $backgroudcolor;
+  /* Цвет фона */
+  width: 300px;
+  /* Ширина блока */
+  padding: 10px;
+  /* Поля */
+  color: #FFFFFF;
+  font-size: 34pt;
+  text-align: center;
+  border-radius: 10px;
+  font-family: $font; }

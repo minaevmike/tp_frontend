@@ -4,14 +4,16 @@ define([
     'views/main',
     'views/game',
     'views/gameOver',
-    'views/viewManager'
+    'views/viewManager',
+    'views/joystick'
 ], function(
      Backbone,
      scoreboard,
      main,
      game,
      gameOver,
-     viewManager
+     viewManager,
+     joystick
 ){
 
     var lastScreen = "";
@@ -19,6 +21,7 @@ define([
         routes: {
             'scoreboard': 'scoreboardAction',
             'game': 'gameAction',
+            'joystick': 'joystickAction',
             '*default': 'defaultActions'
         },
         defaultActions: function () {
@@ -35,6 +38,10 @@ define([
             gameOver.hide();
             game.show();
             //game.gameOver();
+        },
+        joystickAction: function() {
+            viewManager.add(joystick);
+            joystick.show();
         }
     });
 

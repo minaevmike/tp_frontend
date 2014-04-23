@@ -2,26 +2,37 @@ define([
     'backbone',
     'tmpl/game',
     'views/gameOver',
-    'mechanics/mechanics'
+    'mechanics/mechanics',
+    'tmpl/console'
 ], function(
     Backbone,
     tmpl,
     gameOver,
-    game
+    game,
+    consol
 ){
 
     var View = Backbone.View.extend({
         template: tmpl,
+        con:consol,
         className: "#game",
         initialize: function () {
         },
         render: function () {
-            $(this.className).html(this.template());
+            $(this.className).html(this.con());
+            require(['console'], function (console) {
+                
+            });
+            $(this.className).on( "start", function(){
+                $("#console").hide();
+                game.start(gameOver);
+            });
+            /*$(this.className).html(this.template());
             $('[name="button_finish"]').click(function(){
                 $(this.className).hide();
                 gameOver.show();
             });
-            game.start(gameOver);
+            game.start(gameOver);*/
             //init();
         },
         show: function () {

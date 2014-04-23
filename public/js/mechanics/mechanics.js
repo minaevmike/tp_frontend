@@ -281,7 +281,25 @@ define(['exports','jquery'], function(exports, $){
 
     function init() {
         canvas = document.getElementById("canvas");
-        game = new Game(6, 6, 640, 480, 20, 0.2);
+        canvas1 = $("canvas")
+        canvas1.css('margin',0);
+        canvas1.css('padding',0);
+        canvas1.css('position','absolute');
+        canvas1.css('top', 0);
+        canvas1.css('left',0);
+        window.addEventListener('resize', resizeCanvas, false);
+        function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                
+                /**
+                 * Your drawings need to be inside this function otherwise they will be reset when 
+                 * you resize the browser window and the canvas goes will be cleared.
+                 */
+        }
+        resizeCanvas();
+        game = new Game(6, 6, canvas.width, canvas.height, 20, 0.2);
+        console.log(canvas.width); console.log(canvas.height);
         sky;
         count = 100;
         for(i = 0; i < count; ++i){
@@ -294,8 +312,8 @@ define(['exports','jquery'], function(exports, $){
             keys[e.keyCode] = false;
         });
         enemys.push(new Enemy(350,200, 60, 60, 100));
-        canvas.width = game.width; // задаём ширину холста
-        canvas.height = game.height; // задаём высоту холста
+        //canvas.width = game.width; // задаём ширину холста
+        //canvas.height = game.height; // задаём высоту холста
         context = canvas.getContext('2d');
         field = new Field(0, 0, game.width, game.height, "#000000")
         player = new Player( canvas.width / 2, canvas.height - 30 / 2, 60, 60, 100);

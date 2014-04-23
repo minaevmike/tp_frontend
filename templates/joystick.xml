@@ -1,0 +1,13 @@
+<fest:template xmlns:fest="http://fest.mail.ru" context_name="json">
+	<head>
+		<title>joystick</title>
+	</head>
+	<body>
+		<form>
+			<input id="token" />
+			<button id="connect" type="submit">connect</button>
+		</form>
+		<div id="message"></div>
+		<script data-main="/examples/joystick" src="/js/lib/require.js"></script>
+	</body>
+</fest:template>
