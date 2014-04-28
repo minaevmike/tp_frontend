@@ -90,12 +90,14 @@ define(['exports','jquery'], function(exports, $){
             context.fillRect(this.x, this.y, 3, 10);
         }
     }
-    function Enemy(x, y, width, height, health){
+    function Enemy(x, y, Vy, width, height, health){
         this.x = x;
         this.y = y;
+        this.Vy = Vy;
         this.width = width;
         this.height = height;
         this.health = health;
+        this.price = health;
         this.img = new Image();
         this.img.src = '/images/enemy.png';
         this.draw = function(){
@@ -166,6 +168,15 @@ define(['exports','jquery'], function(exports, $){
             enemyBullets[i].draw();
         }
     }
+    function updateEnemys(){
+        for(i = 0; i < enemys.length; ++i){
+            enemys[i].y  -= enemys[i].Vy;
+
+            if(enemys[i].y > game.height){
+                enemys.splice(i, 1);
+            }
+        }
+    }
     function Player(x, y, width, height, health){
         this.x = x;
         this.y = y;
@@ -173,6 +184,7 @@ define(['exports','jquery'], function(exports, $){
         this.height = height;
         this.health = health;
         this.maxHP = health;
+        this.damage = 10;
         this.tshot = 1;
         this.attackSpeed = 30;
         this.shotTimer = 0;
@@ -180,6 +192,41 @@ define(['exports','jquery'], function(exports, $){
         this.img.src = '/images/player.png';
         this.draw = function(){
             context.drawImage(this.img, this.x - this.width / 2, this.y - this.height / 2, this.width, this.height);
+        }
+    }
+
+    function genEnemys(){
+        switch (true) {
+            case score < 100:
+                if (enemys.length < 3) {
+                    if (Math.random() > 0.95) {
+                        enemys.push(new Enemy(Math.random()*game.width, 20,  -(game.Vy/5), 60, 60, 20));
+                    }
+                }
+            break
+            case ((score > 100) && (score < 500)):
+                if (enemys.length < 7) {
+                    if (Math.random() > 0.8) {
+                        enemys.push(new Enemy(Math.random()*game.width, 20,  -(game.Vy/5), 60, 60, 30));
+                        enemys.push(new Enemy(Math.random()*game.width, 20,  -(game.Vy/5), 60, 60, 30));
+                    }
+                }
+            break
+            case ((score > 500) && (score < 1000)):
+                if (enemys.length < 7) {
+                    if (Math.random() > 0.5) {
+                        enemys.push(new Enemy(Math.random()*game.width, 20,  -(game.Vy/5), 60, 60, 45));
+                        enemys.push(new Enemy(Math.random()*game.width, 20,  -(game.Vy/5), 60, 60, 45));
+                    }
+                }
+            break
+            case score > 1000:
+                if (enemys.length < 9) {
+                    if (Math.random() > 0.5) {
+                        enemys.push(new Enemy(Math.random()*game.width, 20,  -(game.Vy/5), 60, 60, 60));
+                        enemys.push(new Enemy(Math.random()*game.width, 20,  -(game.Vy/5), 60, 60, 60));
+                    }
+                }
         }
     }
 
@@ -191,8 +238,8 @@ define(['exports','jquery'], function(exports, $){
                     enemys[i].health -= bullets[j].damage;
                     bullets.splice(j, 1);
                     if (enemys[i].health <= 0){
+                        score += enemys[i].price;
                         enemys.splice(i, 1);
-                        score += 100;
                     }
                 }
             }
@@ -226,6 +273,7 @@ define(['exports','jquery'], function(exports, $){
                     if (player.tshot < 3) {
                         player.tshot++;
                     }
+                    player.damage += 5;
                     score += 5;
                     powerUps.splice(i, 1);
                 }
@@ -263,6 +311,7 @@ define(['exports','jquery'], function(exports, $){
     function play(){
         collision();
         updatePosition();
+        updateEnemys();
         updatePowerUps();
         updateBullets();
         field.draw();
@@ -311,26 +360,29 @@ define(['exports','jquery'], function(exports, $){
         }).keyup(function(e){
             keys[e.keyCode] = false;
         });
-        enemys.push(new Enemy(350,200, 60, 60, 100));
+        enemys.push(new Enemy(Math.round(Math.random()*game.width), 20, -(game.Vy/5), 60, 60, 10));
+        //enemys.push(new Enemy(350,200, 60, 60, 100));
         //canvas.width = game.width; // задаём ширину холста
         //canvas.height = game.height; // задаём высоту холста
         context = canvas.getContext('2d');
         field = new Field(0, 0, game.width, game.height, "#000000")
         player = new Player( canvas.width / 2, canvas.height - 30 / 2, 60, 60, 100);
+
         intervals.push(setInterval(function(){
-            if (Math.random() > 0.95 && powerUps.length < 20) {
+            if (Math.random() > 0.98 && powerUps.length < 2) {
                 powerUps.push(new powerUp(Math.random()*game.width, 20, -(game.Vy / 6), "shootBonus",'/images/bulletup.png'));
             }
-            if (Math.random() > 0.95 && powerUps.length < 20) {
+            if (Math.random() > 0.98 && powerUps.length < 2) {
                 powerUps.push(new powerUp(Math.random()*game.width, 20, -(game.Vy / 6), "attackSpeedBonus", '/images/firespeed.png'));
             }
-            if (Math.random() > 0.95 && powerUps.length < 20) {
+            if (Math.random() > 0.98 && powerUps.length < 2) {
                 powerUps.push(new powerUp(Math.random()*game.width, 20, -(game.Vy / 6), "healthBonus", '/images/health.png'));
             }
         }, 350));
+        intervals.push(setInterval(genEnemys, 350));
         intervals.push(setInterval(function(){
             for(i = 0; i < enemys.length; ++i)
-                if (Math.random() > 0.5)
+                if (Math.random() > 0.8)
                     enemyBullets.push(new Bullet(enemys[i].x, enemys[i].y, 0, -game.Vy, "#FF0000", 10, 10));
         }, 350));
         intervals.push(setInterval(play, 1000 / 50));
@@ -357,15 +409,21 @@ define(['exports','jquery'], function(exports, $){
         if(keys[32]){
             if( player.shotTimer > player.attackSpeed){
                 player.shotTimer = 0;
+                if (player.tshot == 6) {
+                    bullets.push(new Bullet(player.x - 17, player.y, 0, game.Vy , "#FFFF00", player.damage));
+                    bullets.push(new Bullet(player.x - 17, player.y, -5, game.Vy , "#FFFF00", player.damage));
+                    bullets.push(new Bullet(player.x + 17, player.y, 0, game.Vy , "#FFFF00", player.damage));
+                    bullets.push(new Bullet(player.x + 17, player.y, 5, game.Vy , "#FFFF00", player.damage));
+                }
                 if (player.tshot == 3) {
-                    bullets.push(new Bullet(player.x - 17, player.y, -5, game.Vy , "#FFFF00", 10));
-                    bullets.push(new Bullet(player.x, player.y, 0, game.Vy , "#FFFF00", 10));
-                    bullets.push(new Bullet(player.x + 17, player.y, 5, game.Vy , "#FFFF00", 10));
+                    bullets.push(new Bullet(player.x - 17, player.y, -5, game.Vy , "#FFFF00", player.damage));
+                    bullets.push(new Bullet(player.x, player.y, 0, game.Vy , "#FFFF00", player.damage));
+                    bullets.push(new Bullet(player.x + 17, player.y, 5, game.Vy , "#FFFF00", player.damage));
                 } else if (player.tshot == 2) {
-                    bullets.push(new Bullet(player.x - 17, player.y, 0, game.Vy , "#FFFF00", 10));
-                    bullets.push(new Bullet(player.x + 17, player.y, 0, game.Vy , "#FFFF00", 10));
+                    bullets.push(new Bullet(player.x - 17, player.y, 0, game.Vy , "#FFFF00", player.damage));
+                    bullets.push(new Bullet(player.x + 17, player.y, 0, game.Vy , "#FFFF00", player.damage));
                 } else {
-                    bullets.push(new Bullet(player.x, player.y, 0, game.Vy , "#FFFF00", 10));
+                    bullets.push(new Bullet(player.x, player.y, 0, game.Vy , "#FFFF00", player.damage));
                 }
                 keys[32] = false;
             }
