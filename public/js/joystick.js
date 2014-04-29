@@ -41,7 +41,6 @@ define([
 
 	// Инициализация
 	init = function(){
-		message.innerHTML = 'ready';
 		// Если id нет
 		if (!localStorage.getItem('playerguid')){
 			// Ждем ввода токена
@@ -85,7 +84,7 @@ define([
 		console.log('start player');
 		// Сохраняем id связки
 		localStorage.setItem('playerguid', guid);
-		message.innerHTML = 'game';
+		$("#joystick").trigger("start");
 	};
 
 	server.on('reconnect', reconnect);

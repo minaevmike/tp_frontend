@@ -91,7 +91,7 @@ define([
 
 	// Обмен сообщениями
 	server.on('message', function(data, answer){
-		console.log('message', data);
+		$("#game").trigger('action', data);
 		answer('answer');
 	});
 

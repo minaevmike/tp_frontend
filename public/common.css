@@ -1,4 +1,19 @@
 @charset "UTF-8";
+#round__button {
+  display: block;
+  width: 400px;
+  height: 400px;
+  line-height: 400px;
+  border: 2px solid #f5f5f5;
+  border-radius: 50%;
+  color: #FFFFFF;
+  text-align: center;
+  text-decoration: none;
+  background: red;
+  box-shadow: 0 0 3px gray;
+  font-size: 50px;
+  font-weight: bold; }
+
 .main__button_start, .button_back, .main__button_scoreboard {
   -moz-box-shadow: inset 0px 1px 0px 0px #fce2c1;
   -webkit-box-shadow: inset 0px 1px 0px 0px #fce2c1;
@@ -60,11 +75,6 @@ th {
   color: white; }
 
 canvas {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
   display: block;
   margin: 0;
   padding: 0; }

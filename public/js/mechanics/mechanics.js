@@ -13,6 +13,7 @@ define(['exports','jquery'], function(exports, $){
     var score = 0;
     var gameOver;
     var intervals = new Array();
+    var kx = 1, ky = 1;
 
     function Game(Vx, Vy, width, height, collisionDmg, starSpeed){
         this.Vx = Vx;
@@ -100,6 +101,7 @@ define(['exports','jquery'], function(exports, $){
         this.price = health;
         this.img = new Image();
         this.img.src = '/images/enemy.png';
+        this.direction = 1;
         this.draw = function(){
             context.drawImage(this.img, this.x - this.width / 2, this.y - this.height / 2, this.width, this.height);
         } 
@@ -130,11 +132,10 @@ define(['exports','jquery'], function(exports, $){
     }
     function aiMove(){
         for(i = 0; i < enemys.length; ++i){
-            if(Math.random() > 0.5){
-                enemys[i].x += 3;
-            }
-            else
-                enemys[i].x -= 3;
+            if(Math.random() > 0.9)
+                enemys[i].direction *= -1;
+            if(enemys[i].x + 3 * enemys[i].direction < game.width && enemys[i].x + 3 * enemys[i].direction > 0)
+                enemys[i].x += 3 * enemys[i].direction;
         }
     }
     function updateStarSky(){
@@ -170,7 +171,7 @@ define(['exports','jquery'], function(exports, $){
     }
     function updateEnemys(){
         for(i = 0; i < enemys.length; ++i){
-            enemys[i].y  -= enemys[i].Vy;
+            enemys[i].y  -= enemys[i].Vy/4;
 
             if(enemys[i].y > game.height){
                 enemys.splice(i, 1);
@@ -336,6 +337,8 @@ define(['exports','jquery'], function(exports, $){
         canvas1.css('position','absolute');
         canvas1.css('top', 0);
         canvas1.css('left',0);
+        $("body").css('margin', 0);
+        $('body').css('padding', 0);
         window.addEventListener('resize', resizeCanvas, false);
         function resizeCanvas() {
                 canvas.width = window.innerWidth;
@@ -392,19 +395,19 @@ define(['exports','jquery'], function(exports, $){
         player.shotTimer++;
         if(keys[39]){
             if(player.x + player.width / 2 + game.Vx <= game.width)
-                player.x += game.Vx;
+                player.x += kx*game.Vx;
         }
         if(keys[37]){
             if(player.x - player.width / 2- game.Vx >= 0)
-                player.x -= game.Vx;
+                player.x -= kx*game.Vx;
         }
         if(keys[38]){
             if(player.y - player.height / 2 - game.Vy >= 0)
-                player.y -= game.Vy;
+                player.y -= ky*game.Vy;
         }
         if(keys[40]){
             if(player.y + player.height / 2 + game.Vy <= game.height)
-                player.y += game.Vy;
+                player.y += ky*game.Vy;
         }
         if(keys[32]){
             if( player.shotTimer > player.attackSpeed){
@@ -428,10 +431,45 @@ define(['exports','jquery'], function(exports, $){
                 keys[32] = false;
             }
         }
+        for(i = 37; i <= 40;++i){
+            keys[i] = false;
+        }
     }
     exports.start = function start(a){
         gameOver = a;
         init();
+    }
+    exports.move = function(a){
+        if(a == 1){
+            keys[37] = true;
+        }
+        if(a == 2){
+            keys[39] = true;
+        }
+        if(a == 3){
+            keys[38] = true;
+        }
+        if(a == 4){
+            keys[40] = true;
+        }
+    }
+    exports.accelerationX = function(a){
+        if(a < 1)
+            kx = 1;
+        else
+            kx = a;
+        console.log("kx",kx);
+    }
+    exports.accelerationY = function(a){
+        if(a < 1)
+            ky = 1;
+        else
+            ky = a;
+        console.log("ky",ky);
+
+    }
+    exports.shoot = function(){
+        keys[32] = true;
     }
     return exports;
 });

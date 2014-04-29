@@ -3,11 +3,16 @@
 		<title>joystick</title>
 	</head>
 	<body>
-		<form>
+		<form id="connectForm">
 			<input id="token" />
 			<button id="connect" type="submit">connect</button>
 		</form>
-		<div id="message"></div>
+		<div id="joystickk"></div>
+		<div id="helpMsg">
+			<center>
+				Tap any where to shoot
+			</center>
+		</div>
 		<script data-main="/examples/joystick" src="/js/lib/require.js"></script>
 	</body>
 </fest:template>

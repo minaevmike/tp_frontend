@@ -1,5 +1,7 @@
 $font: "Rockwell Extra Bold", "Rockwell Bold", monospace;
 $backgroudcolor : #4D4C49;
+$shootButtonColor: #FF0000;
+$size: 400px;
 @mixin border-radius($radius){
   -webkit-border-top-left-radius: $radius;
   -moz-border-radius-topleft: $radius;
@@ -22,6 +24,21 @@ $backgroudcolor : #4D4C49;
 
 }
 
+#round__button {
+    display:block;
+    width:$size;
+    height:$size;
+    line-height:$size;
+    border: 2px solid #f5f5f5;
+    border-radius: 50%;
+    color: #FFFFFF;
+    text-align:center;
+    text-decoration:none;
+    background: $shootButtonColor;
+    box-shadow: 0 0 3px gray;
+    font-size:50px;
+    font-weight:bold;
+}
 .main__button_start, .button_back, .main__button_scoreboard {
   @include shadow(inset 0px 1px 0px 0px #fce2c1);
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #333377), color-stop(1, #333399));

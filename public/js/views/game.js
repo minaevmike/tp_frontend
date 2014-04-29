@@ -26,6 +26,23 @@ define([
             $(this.className).on( "start", function(){
                 $("#console").hide();
                 game.start(gameOver);
+
+            });
+            $(this.className).on('action', function(event, param){
+                par = param.split(' ');
+                if(par[0] == 1){
+                    game.move(par[1]);
+                }
+                if(par[0] == 2){
+                    if(par[1] == 1)
+                        game.accelerationX(par[2]);
+                    if(par[1] == 2)
+                        game.accelerationY(par[2]);
+                }
+                if(par[0] == 3){
+                    game.shoot();
+                }
+                //console.log('ping', param);
             });
             /*$(this.className).html(this.template());
             $('[name="button_finish"]').click(function(){
