@@ -44,13 +44,7 @@ define([
                 }
                 //console.log('ping', param);
             });
-            /*$(this.className).html(this.template());
-            $('[name="button_finish"]').click(function(){
-                $(this.className).hide();
-                gameOver.show();
-            });
-            game.start(gameOver);*/
-            //init();
+
         },
         show: function () {
             $("#score").replaceWith( "<div id = \"score\">" + Math.ceil(Math.random() * 10000) + "</div>" );

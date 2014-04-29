@@ -7,6 +7,7 @@ require.config({
         backbone: "lib/backbone",
         Connector: "lib/Connector",
         FnQuery: "lib/FnQuery",
+        Modernizr: "lib/Modernizr",
         "socket.io": "/socket.io/socket.io"
     },
     shim: {
@@ -19,6 +20,9 @@ require.config({
         },
         "socket.io": {
             exports: "io"
+        },
+        "Modernizr": {
+            exports: 'Modernizr'
         }
     }
 });
